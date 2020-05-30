@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RvAdapter.ClickedItem{
     private ArrayList<RvItem> arrayList;
 
     @Override
@@ -33,14 +33,13 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        RvAdapter rvAdapter = new RvAdapter(arrayList);
+        RvAdapter rvAdapter = new RvAdapter(arrayList,this);
         recyclerView.setAdapter(rvAdapter);
-        rvAdapter.setOnItemClickListener(new RvAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Toast.makeText(getApplicationContext(),arrayList.get(position).getTitle(),Toast.LENGTH_LONG).show();;
-            }
-        });
+
     }
 
+    @Override
+    public void clickedItem(RvItem clickedRvItem) {
+        Toast.makeText(getApplicationContext(),clickedRvItem.getTitle(),Toast.LENGTH_SHORT).show();
+    }
 }

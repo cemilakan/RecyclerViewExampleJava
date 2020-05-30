@@ -14,25 +14,22 @@ import java.util.List;
 
 public class RvAdapter extends RecyclerView.Adapter<RvAdapter.AdapterViewHolder> {
     private List<RvItem> responseList;
-    private OnItemClickListener mListener;
+    private ClickedItem clickedItem;
 
-    public interface OnItemClickListener{
-        void onItemClick(int position);
+    public interface ClickedItem{
+        void clickedItem(RvItem clickedRvItem);
+
     }
-
-    public void setOnItemClickListener(OnItemClickListener listener){
-        mListener = listener;
-    }
-
-    RvAdapter(List<RvItem> responseList){
+    RvAdapter(List<RvItem> responseList,ClickedItem clickedItem){
         this.responseList=responseList;
+        this.clickedItem=clickedItem;
     }
 
     @NonNull
     @Override
     public AdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item, parent, false);
-        return new AdapterViewHolder(view,mListener);
+        return new AdapterViewHolder(view);
     }
 
     @Override
@@ -49,7 +46,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.AdapterViewHolder>
         TextView item_title;
         TextView item_subtitle;
 
-        AdapterViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
+        AdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             item_parent=itemView.findViewById(R.id.rv_item_root);
             item_image=itemView.findViewById(R.id.rv_item_img);
@@ -58,12 +55,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.AdapterViewHolder>
             item_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null){
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-                            listener.onItemClick(position);
-                        }
-                    }
+                    clickedItem.clickedItem(responseList.get(getAdapterPosition()));
                 }
             });
         }
